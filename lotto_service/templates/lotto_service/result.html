@@ -2,6 +2,9 @@
 <html>
 <head>
     <title>로또 번호 생성 결과</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lotto.css' %}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,7 +58,7 @@
         {% endfor %}
         <span class="number bonus">+ {{ bonus }}</span>
     </div>
-    <a href="{% url 'lotto:generate_numbers' %}" class="generate-button">다시 생성하기</a>
-    <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
+    <a href="{% url 'lotto:generate_numbers' %}" class="button">다시 생성하기</a>
+    <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
 </body>
 </html> 

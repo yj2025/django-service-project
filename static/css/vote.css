@@ -1,0 +1,113 @@
+/* 투표 서비스 스타일 */
+.vote-list {
+    margin-top: 20px;
+}
+
+.vote-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    transition: transform 0.3s;
+}
+
+.vote-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.vote-title {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.vote-description {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.vote-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.vote-link:hover {
+    text-decoration: underline;
+}
+
+.create-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-height: 100px;
+}
+
+.choice-list {
+    margin-top: 20px;
+}
+
+.choice-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.choice-radio {
+    margin-right: 10px;
+}
+
+.choice-label {
+    flex-grow: 1;
+}
+
+.vote-results {
+    margin-top: 30px;
+}
+
+.result-bar {
+    height: 30px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.result-fill {
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.5s;
+}
+
+.result-text {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    line-height: 30px;
+    color: #333;
+    font-weight: bold;
+} 
