@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>투표 서비스</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .vote-list {
+            margin-top: 20px;
+        }
+        .vote-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .create-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>투표 서비스</h1>
+    <a href="{% url 'vote:create_vote' %}" class="create-button">새 투표 만들기</a>
+    
+    <div class="vote-list">
+        {% for vote in votes %}
+        <div class="vote-item">
+            <h2>{{ vote.title }}</h2>
+            <p>{{ vote.description }}</p>
+            <a href="{% url 'vote:vote_detail' vote.id %}">투표하기</a>
+        </div>
+        {% empty %}
+        <p>아직 생성된 투표가 없습니다.</p>
+        {% endfor %}
+    </div>
+</body>
+</html> 

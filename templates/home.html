@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>서비스 메인 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .service-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+        .service-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .service-link {
+            text-decoration: none;
+            color: #333;
+        }
+        .service-title {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .service-description {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>서비스 메인 페이지</h1>
+    <div class="service-container">
+        <a href="{% url 'vote:index' %}" class="service-link">
+            <div class="service-card">
+                <h2 class="service-title">투표 서비스</h2>
+                <p class="service-description">다양한 주제로 투표를 생성하고 참여해보세요.</p>
+            </div>
+        </a>
+        <a href="{% url 'lotto:index' %}" class="service-link">
+            <div class="service-card">
+                <h2 class="service-title">로또 번호 생성기</h2>
+                <p class="service-description">행운의 로또 번호를 생성해보세요.</p>
+            </div>
+        </a>
+        <a href="{% url 'rsp:index' %}" class="service-link">
+            <div class="service-card">
+                <h2 class="service-title">가위바위보 게임</h2>
+                <p class="service-description">컴퓨터와 가위바위보 게임을 즐겨보세요.</p>
+            </div>
+        </a>
+    </div>
+</body>
+</html> 

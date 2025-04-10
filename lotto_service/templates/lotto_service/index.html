@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>로또 번호 생성기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .title {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 40px;
+        }
+        .generate-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .generate-button:hover {
+            background-color: #45a049;
+        }
+        .home-link {
+            display: block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+        }
+        .number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            margin: 5px;
+        }
+        .bonus {
+            background-color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">로또 번호 생성기</h1>
+        <p class="description">행운의 로또 번호를 생성해보세요.<br>1부터 45까지의 숫자 중 6개가 무작위로 선택됩니다.</p>
+        <a href="{% url 'lotto:generate_numbers' %}" class="generate-button">번호 생성하기</a>
+        <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
+    </div>
+</body>
+</html> 
