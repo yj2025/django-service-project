@@ -2,7 +2,7 @@ from django.shortcuts import render
 import random
 
 def index(request):
-    return render(request, 'lotto_service/index.html')
+    return render(request, 'index.html')
 
 def generate_numbers(request):
     numbers = sorted(random.sample(range(1, 46), 6))
@@ -13,4 +13,4 @@ def generate_numbers(request):
         'numbers': numbers,
         'bonus': bonus
     }
-    return render(request, 'lotto_service/result.html', context)
+    return render(request, 'result.html', context)

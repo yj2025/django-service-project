@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>로또 번호 생성기</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/lotto.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">로또 번호 생성기</h1>
+        <p class="description">행운의 로또 번호를 생성해보세요.<br>1부터 45까지의 숫자 중 6개가 무작위로 선택됩니다.</p>
+        <a href="{% url 'lotto:generate_numbers' %}" class="generate-button">번호 생성하기</a>
+        <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
+    </div>
+</body>
+</html>
