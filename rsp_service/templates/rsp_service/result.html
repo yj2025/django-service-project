@@ -1,80 +1,91 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>가위바위보 결과</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/rsp.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/rsp.css' %}" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .result-container {
-            margin: 30px 0;
-        }
-        .choices {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin: 30px 0;
-        }
-        .choice-box {
-            padding: 20px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            min-width: 150px;
-        }
-        .result {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 30px 0;
-            color: #4CAF50;
-        }
-        .play-again {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 18px;
-            transition: background-color 0.3s;
-        }
-        .play-again:hover {
-            background-color: #45a049;
-        }
-        .home-link {
-            display: block;
-            margin-top: 20px;
-            color: #666;
-            text-decoration: none;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+      }
+      .result-container {
+        margin: 30px 0;
+      }
+      .choices {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin: 30px 0;
+      }
+      .choice-box {
+        padding: 20px;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        min-width: 150px;
+      }
+      .play-again {
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+      .play-again:hover {
+        background-color: #45a049;
+      }
+      .home-link {
+        display: block;
+        margin-top: 20px;
+        color: #666;
+        text-decoration: none;
+      }
+      .result {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 30px 0;
+        color: #4caf50;
+        text-align: center;
+      }
+      .win {
+        color: blue;
+      }
+      .lose {
+        color: red;
+      }
+      .draw {
+        color: #4caf50;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>가위바위보 결과</h1>
     <div class="result-container">
-        <div class="choices">
-            <div class="choice-box">
-                <h3>당신의 선택</h3>
-                <p>{{ user_choice }}</p>
-            </div>
-            <div class="choice-box">
-                <h3>컴퓨터의 선택</h3>
-                <p>{{ computer_choice }}</p>
-            </div>
+      <div class="choices">
+        <div class="choice-box">
+          <h3>당신의 선택</h3>
+          <p>{{ user_choice }}</p>
         </div>
-        <div class="result">
-            {{ result }}
+        <div class="choice-box">
+          <h3>컴퓨터의 선택</h3>
+          <p>{{ computer_choice }}</p>
         </div>
+      </div>
+      <!-- 결과에 따라 클래스를 변경 -->
+      <div class="result {% if result == '승리' %}win {% elif result == '패배' %}lose {% else %}무승부 {% endif %}">
+        {{ result }}
+      </div>
     </div>
     <a href="{% url 'rsp:index' %}" class="play-again">다시 하기</a>
     <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
-</body>
-</html> 
+  </body>
+</html>

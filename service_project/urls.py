@@ -26,4 +26,5 @@ urlpatterns = [
     path('vote/', include('vote_service.urls')),
     path('lotto/', include('lotto_service.urls')),
     path('rsp/', include('rsp_service.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
