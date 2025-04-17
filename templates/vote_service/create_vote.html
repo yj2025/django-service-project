@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>새 투표 만들기</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .choice-list {
+            margin-top: 10px;
+        }
+        .choice-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .choice-item input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .remove-choice {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .add-choice {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            float: right;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+        .button-container {
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .checkbox-group {
+            margin-top: 10px;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">새 투표 만들기</h1>
+        
+        <div class="form-container">
+            <form method="post" id="voteForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_title">제목</label>
+                    {{ form.title }}
+                    <div class="error-message" id="titleError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_description">설명</label>
+                    {{ form.description }}
+                    <div class="error-message" id="descriptionError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_end_date">마감일시</label>
+                    {{ form.end_date }}
+                    <div class="error-message" id="endDateError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        {{ form.is_multiple_choice }}
+                        다중 선택 허용
+                    </label>
+                </div>
+                
+                <div class="choice-list" id="choiceList">
+                    <div class="choice-item">
+                        <input type="text" name="choices" placeholder="선택지 1" required>
+                        <button type="button" class="remove-choice" onclick="removeChoice(this)">삭제</button>
+                    </div>
+                    <div class="choice-item">
+                        <input type="text" name="choices" placeholder="선택지 2" required>
+                        <button type="button" class="remove-choice" onclick="removeChoice(this)">삭제</button>
+                    </div>
+                </div>
+                
+                <button type="button" class="add-choice" onclick="addChoice()">선택지 추가</button>
+                <div class="button-container">
+                    <button type="submit" class="submit-button">투표 생성하기</button>
+                </div>
+            </form>
+        </div>
+        
+        <a href="{% url 'vote_service:index' %}" class="link">← 목록으로 돌아가기</a>
+        <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
+    </div>
+
+    <script>
+        function addChoice() {
+            const choiceList = document.getElementById('choiceList');
+            const choiceCount = choiceList.children.length;
+            const newChoice = document.createElement('div');
+            newChoice.className = 'choice-item';
+            newChoice.innerHTML = `
+                <input type="text" name="choices" placeholder="선택지 ${choiceCount + 1}" required>
+                <button type="button" class="remove-choice" onclick="removeChoice(this)">삭제</button>
+            `;
+            choiceList.appendChild(newChoice);
+        }
+
+        function removeChoice(button) {
+            const choiceList = document.getElementById('choiceList');
+            if (choiceList.children.length > 2) {
+                button.parentElement.remove();
+            } else {
+                alert('최소 2개의 선택지가 필요합니다.');
+            }
+        }
+
+        document.getElementById('voteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 에러 메시지 초기화
+            document.getElementById('titleError').textContent = '';
+            document.getElementById('descriptionError').textContent = '';
+            document.getElementById('endDateError').textContent = '';
+            
+            let isValid = true;
+            
+            // 제목 검사
+            const title = document.getElementById('id_title').value.trim();
+            if (!title) {
+                document.getElementById('titleError').textContent = '제목을 입력해주세요.';
+                isValid = false;
+            }
+            
+            // 설명 검사
+            const description = document.getElementById('id_description').value.trim();
+            if (!description) {
+                document.getElementById('descriptionError').textContent = '설명을 입력해주세요.';
+                isValid = false;
+            }
+            
+            // 마감일시 검사
+            const endDate = document.getElementById('id_end_date').value;
+            if (!endDate) {
+                document.getElementById('endDateError').textContent = '마감일시를 입력해주세요.';
+                isValid = false;
+            } else {
+                const selectedDate = new Date(endDate);
+                const now = new Date();
+                if (selectedDate <= now) {
+                    document.getElementById('endDateError').textContent = '마감일시는 현재 시간보다 이후여야 합니다.';
+                    isValid = false;
+                }
+            }
+            
+            // 선택지 검사
+            const choices = document.getElementsByName('choices');
+            let emptyChoices = 0;
+            for (let choice of choices) {
+                if (!choice.value.trim()) {
+                    emptyChoices++;
+                }
+            }
+            if (emptyChoices > 0) {
+                alert('모든 선택지를 입력해주세요.');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                this.submit();
+            }
+        });
+    </script>
+</body>
+</html> 

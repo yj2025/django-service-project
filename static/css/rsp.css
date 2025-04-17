@@ -61,10 +61,10 @@ body {
   text-align: center;
 }
 .win {
-  color: blue;
+  color: #1f8ecd;
 }
 .lose {
-  color: red;
+  color: #e84057;
 }
 .draw {
   color: #4caf50;

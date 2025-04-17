@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ vote.title }} - 투표 결과</title>
+    {% load static %}
+    {% load vote_extras %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+        .vote-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .vote-title {
+            margin-top: 0;
+            color: #333;
+        }
+        .vote-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin: 10px 0;
+        }
+        .vote-description {
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        .results-container {
+            margin-top: 30px;
+        }
+        .result-item {
+            margin-bottom: 20px;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .result-bar-container {
+            background-color: #e9ecef;
+            border-radius: 4px;
+            height: 25px;
+            overflow: hidden;
+        }
+        .result-bar {
+            background-color: #4CAF50;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+        .total-votes {
+            margin-top: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .comment-section {
+            margin-top: 30px;
+        }
+        .comment-form {
+            margin-bottom: 20px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .comment-list {
+            margin-top: 20px;
+        }
+        .comment-item {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .comment-meta {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">투표 결과</h1>
+        
+        <div class="vote-container">
+            <h2 class="vote-title">{{ vote.title }}</h2>
+            
+            <div class="vote-meta">
+                <p>생성자: {{ vote.creator.username }} | 생성일: {{ vote.created_at|date:"Y-m-d H:i" }}</p>
+                {% if vote.end_date %}
+                <p>마감일: {{ vote.end_date|date:"Y-m-d H:i" }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="vote-description">
+                {{ vote.description|linebreaks }}
+            </div>
+            
+            <div class="results-container">
+                {% with total_votes=vote.choices.all|sum_votes %}
+                {% for choice in vote.choices.all %}
+                <div class="result-item">
+                    <div class="result-header">
+                        <span>{{ choice.choice_text }}</span>
+                        <span>{{ choice.votes }}표 ({{ choice.votes|percentage:total_votes }}%)</span>
+                    </div>
+                    <div class="result-bar-container">
+                        <div class="result-bar" style="width: {% widthratio choice.votes total_votes 100 %}%;">
+                            {% if choice.votes > 0 %}{% widthratio choice.votes total_votes 100 %}%{% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div class="total-votes">
+                    총 투표수: {{ total_votes }}표
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+        
+        <div class="comment-section">
+            <h3>댓글</h3>
+            
+            {% if user.is_authenticated %}
+            <div class="comment-form">
+                <form method="post" action="{% url 'vote_service:add_comment' vote.id %}" id="comment-form">
+                    {% csrf_token %}
+                    {{ form.content }}
+                    <button type="submit" class="submit-button">댓글 작성</button>
+                </form>
+            </div>
+            {% else %}
+            <p>댓글을 작성하려면 <a href="{% url 'accounts:login' %}">로그인</a>이 필요합니다.</p>
+            {% endif %}
+            
+            <div class="comment-list">
+                {% for comment in comments %}
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        {{ comment.user.username }} | {{ comment.created_at|date:"Y-m-d H:i" }}
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.content|linebreaks }}
+                    </div>
+                </div>
+                {% empty %}
+                <p>아직 댓글이 없습니다.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <a href="{% url 'vote_service:index' %}" class="link">← 목록으로 돌아가기</a>
+        <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
+    </div>
+    
+    <script>
+        document.getElementById('comment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const commentList = document.querySelector('.comment-list');
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <div class="comment-meta">
+                            ${data.comment.author} | ${data.comment.created_at}
+                        </div>
+                        <div class="comment-content">
+                            ${data.comment.content}
+                        </div>
+                    `;
+                    commentList.insertBefore(commentItem, commentList.firstChild);
+                    form.reset();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html> 

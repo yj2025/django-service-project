@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>투표 서비스</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vote.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">투표 서비스</h1>
+        
+        {% if user.is_authenticated %}
+        <a href="{% url 'vote_service:create_vote' %}" class="create-button">새 투표 만들기</a>
+        {% else %}
+        <p>투표를 생성하려면 <a href="{% url 'accounts:login' %}">로그인</a>이 필요합니다.</p>
+        {% endif %}
+        
+        <div class="vote-list">
+            <h2 class="section-title">진행중인 투표</h2>
+            <div class="vote-grid">
+                {% for vote in active_votes %}
+                <div class="vote-card">
+                    <a href="{% url 'vote_service:detail' vote.id %}">{{ vote.title }}</a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <h2 class="section-title">종료된 투표</h2>
+            <div class="vote-grid">
+                {% for vote in closed_votes %}
+                <div class="vote-card">
+                    <a href="{% url 'vote_service:results' vote.id %}">{{ vote.title }}</a>
+                </div>
+                {% empty %}
+                <p>종료된 투표가 없습니다.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
+    </div>
+</body>
+</html> 

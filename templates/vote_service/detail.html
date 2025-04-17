@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ vote.title }} - 투표 상세</title>
+    {% load static %}
+    {% load vote_extras %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+        .vote-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .vote-title {
+            margin-top: 0;
+            color: #333;
+        }
+        .vote-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin: 10px 0;
+        }
+        .vote-description {
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        .choice-list {
+            margin: 20px 0;
+        }
+        .choice-item {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .choice-item label {
+            display: block;
+            cursor: pointer;
+        }
+        .choice-item input[type="radio"],
+        .choice-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+        .comment-section {
+            margin-top: 30px;
+        }
+        .comment-form {
+            margin-bottom: 20px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .comment-list {
+            margin-top: 20px;
+        }
+        .comment-item {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+        .comment-meta {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .expired-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .already-voted-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">투표 상세</h1>
+        
+        <div class="vote-container">
+            <h2 class="vote-title">{{ vote.title }}</h2>
+            
+            <div class="vote-meta">
+                <p>생성자: {{ vote.creator.username }} | 생성일: {{ vote.created_at|date:"Y-m-d H:i" }}</p>
+                {% if vote.end_date %}
+                <p>마감일: {{ vote.end_date|date:"Y-m-d H:i" }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="vote-description">
+                {{ vote.description|linebreaks }}
+            </div>
+            
+            {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+            {% endif %}
+            
+            {% if vote.is_expired %}
+            <div class="expired-message">
+                이 투표는 마감되었습니다. <a href="{% url 'vote_service:results' vote.id %}">결과 보기</a>
+            </div>
+            {% elif user_voted %}
+            <div class="already-voted-message">
+                이미 투표하셨습니다. <a href="{% url 'vote_service:results' vote.id %}">결과 보기</a>
+            </div>
+            {% else %}
+            <form method="post" action="{% url 'vote_service:vote' vote.id %}">
+                {% csrf_token %}
+                <div class="choice-list">
+                    {% for choice in vote.choices.all %}
+                    <div class="choice-item">
+                        <label>
+                            {% if vote.is_multiple_choice %}
+                            <input type="checkbox" name="choice" value="{{ choice.id }}">
+                            {% else %}
+                            <input type="radio" name="choice" value="{{ choice.id }}" required>
+                            {% endif %}
+                            {{ choice.choice_text }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="submit-button">투표하기</button>
+            </form>
+            {% endif %}
+        </div>
+        
+        <div class="comment-section">
+            <h3>댓글</h3>
+            
+            {% if user.is_authenticated %}
+            <div class="comment-form">
+                <form method="post" action="{% url 'vote_service:add_comment' vote.id %}">
+                    {% csrf_token %}
+                    {{ comment_form.content }}
+                    <button type="submit" class="submit-button">댓글 작성</button>
+                </form>
+            </div>
+            {% else %}
+            <p>댓글을 작성하려면 <a href="{% url 'accounts:login' %}">로그인</a>이 필요합니다.</p>
+            {% endif %}
+            
+            <div class="comment-list">
+                {% for comment in comments %}
+                <div class="comment-item">
+                    <div class="comment-meta">
+                        {{ comment.user.username }} | {{ comment.created_at|date:"Y-m-d H:i" }}
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.content|linebreaks }}
+                    </div>
+                </div>
+                {% empty %}
+                <p>아직 댓글이 없습니다.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <a href="{% url 'vote_service:index' %}" class="link">← 목록으로 돌아가기</a>
+        <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
+    </div>
+</body>
+</html> 

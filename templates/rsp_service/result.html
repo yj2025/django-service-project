@@ -3,8 +3,8 @@
   <head>
     <title>가위바위보 결과</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/rsp.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=1" />
+    <link rel="stylesheet" href="{% static 'css/rsp.css' %}?v=1" />
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -49,22 +49,6 @@
         color: #666;
         text-decoration: none;
       }
-      .result {
-        font-size: 24px;
-        font-weight: bold;
-        margin: 30px 0;
-        color: #4caf50;
-        text-align: center;
-      }
-      .win {
-        color: blue;
-      }
-      .lose {
-        color: red;
-      }
-      .draw {
-        color: #4caf50;
-      }
     </style>
   </head>
   <body>
@@ -80,12 +64,11 @@
           <p>{{ computer_choice }}</p>
         </div>
       </div>
-      <!-- 결과에 따라 클래스를 변경 -->
-      <div class="result {% if result == '승리' %}win {% elif result == '패배' %}lose {% else %}무승부 {% endif %}">
+      <div class="result {% if result == '승리' %}win{% elif result == '패배' %}lose{% else %}draw{% endif %}">
         {{ result }}
       </div>
     </div>
     <a href="{% url 'rsp:index' %}" class="play-again">다시 하기</a>
     <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
   </body>
-</html>
+</html> 
