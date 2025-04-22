@@ -27,6 +27,22 @@
         color: #666;
         text-decoration: none;
       }
+
+      .choice-button {
+        margin: 0 30px;
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .choice-button:hover {
+        background-color: #45a049;
+      }
     </style>
   </head>
   <body>
@@ -39,9 +55,9 @@
       </p>
       <form action="{% url 'rsp:play_game' %}" method="post">
         {% csrf_token %}
-        <button type="submit" name="choice" value="가위" class="choice-button">가위 ✌️</button>
-        <button type="submit" name="choice" value="바위" class="choice-button">바위 ✊</button>
-        <button type="submit" name="choice" value="보" class="choice-button">보 ✋</button>
+        <button type="submit" name="choice" value="가위" class="choice-button">가위</button>
+        <button type="submit" name="choice" value="바위" class="choice-button">바위</button>
+        <button type="submit" name="choice" value="보" class="choice-button">보</button>
       </form>
       <a href="{% url 'home' %}" class="home-link">메인 페이지로 돌아가기</a>
     </div>
