@@ -13,9 +13,9 @@ def play_game(request):
         result = ''
         if user_choice == computer_choice:
             result = '무승부'
-        elif (user_choice == '가위' and computer_choice == '보') or \
-             (user_choice == '바위' and computer_choice == '가위') or \
-             (user_choice == '보' and computer_choice == '바위'):
+        elif ((user_choice == '가위' and computer_choice == '보') or
+              (user_choice == '바위' and computer_choice == '가위') or
+              (user_choice == '보' and computer_choice == '바위')):
             result = '승리'
         else:
             result = '패배'
