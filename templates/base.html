@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>서비스</title>
+    <title>{% block title %}{% endblock %}</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block extra_css %}{% endblock %}
   </head>
   <body>
-    <div>
-      <div>서비스</div>
+    <div class="container">
       <div>
-        {% if user.is_authenticated %}
-        <a href="{% url 'accounts:logout' %}">로그아웃</a>
-        {% else %}
-        <a href="{% url 'accounts:login' %}">로그인</a>
-        <a href="{% url 'accounts:signup' %}">회원가입</a>
-        {% endif %}
+        <div>서비스</div>
+        <div>
+          {% if user.is_authenticated %}
+          <a href="{% url 'accounts:logout' %}">로그아웃</a>
+          {% else %}
+          <a href="{% url 'accounts:login' %}">로그인</a>
+          <a href="{% url 'accounts:signup' %}">회원가입</a>
+          {% endif %}
+        </div>
       </div>
+
+      <hr />
+
+      {% block content %}
+      {% endblock %}
     </div>
-
-    <hr />
-
-    {% block content %}{% endblock %}
   </body>
 </html>

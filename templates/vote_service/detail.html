@@ -6,6 +6,28 @@
     {% load vote_extras %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <style>
+        .top-bar {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .auth-buttons a {
+            color: #666;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .auth-buttons a:hover {
+            background-color: #e9ecef;
+        }
         .vote-container {
             background-color: #f9f9f9;
             padding: 20px;
@@ -106,6 +128,19 @@
     </style>
 </head>
 <body>
+    <div class="top-bar">
+        <div class="title">투표 서비스</div>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                <span>{{ user.username }}님 환영합니다</span>
+                <a href="{% url 'accounts:logout' %}">로그아웃</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">로그인</a>
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="container">
         <h1 class="title">투표 상세</h1>
         
@@ -165,7 +200,7 @@
             
             {% if user.is_authenticated %}
             <div class="comment-form">
-                <form method="post" action="{% url 'vote_service:add_comment' vote.id %}">
+                <form method="post" action="{% url 'vote_service:add_comment' vote.id %}" id="comment-form">
                     {% csrf_token %}
                     {{ comment_form.content }}
                     <button type="submit" class="submit-button">댓글 작성</button>
@@ -194,5 +229,41 @@
         <a href="{% url 'vote_service:index' %}" class="link">← 목록으로 돌아가기</a>
         <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
     </div>
+
+    <script>
+        document.getElementById('comment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const commentList = document.querySelector('.comment-list');
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <div class="comment-meta">
+                            ${data.comment.author} | ${data.comment.created_at}
+                        </div>
+                        <div class="comment-content">
+                            ${data.comment.content}
+                        </div>
+                    `;
+                    commentList.insertBefore(commentItem, commentList.firstChild);
+                    form.reset();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html> 

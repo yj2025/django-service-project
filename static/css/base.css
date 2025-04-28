@@ -1,11 +1,8 @@
 /* base style */
 body {
     font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    line-height: 1.6;
-    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
 h1 {
@@ -15,7 +12,9 @@ h1 {
 }
 
 .container {
-    margin-top: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 /* 버튼 스타일 */

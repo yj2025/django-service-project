@@ -6,6 +6,28 @@
     {% load vote_extras %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <style>
+        .top-bar {
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .auth-buttons a {
+            color: #666;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .auth-buttons a:hover {
+            background-color: #e9ecef;
+        }
         .vote-container {
             background-color: #f9f9f9;
             padding: 20px;
@@ -103,6 +125,19 @@
     </style>
 </head>
 <body>
+    <div class="top-bar">
+        <div class="title">투표 서비스</div>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                <span>{{ user.username }}님 환영합니다</span>
+                <a href="{% url 'accounts:logout' %}">로그아웃</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">로그인</a>
+                <a href="{% url 'accounts:signup' %}">회원가입</a>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="container">
         <h1 class="title">투표 결과</h1>
         
@@ -177,7 +212,7 @@
         <a href="{% url 'vote_service:index' %}" class="link">← 목록으로 돌아가기</a>
         <a href="{% url 'home' %}" class="link">메인 페이지로 돌아가기</a>
     </div>
-    
+
     <script>
         document.getElementById('comment-form').addEventListener('submit', function(e) {
             e.preventDefault();
