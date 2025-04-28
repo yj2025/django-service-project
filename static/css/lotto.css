@@ -57,11 +57,36 @@ body {
     height: 50px;
     line-height: 50px;
     text-align: center;
-    background-color: #f0f0f0;
     border-radius: 50%;
     margin: 5px;
     font-size: 20px;
     font-weight: bold;
+    color: white;
+}
+
+/* 1-10: 노란색 */
+.number[data-range="1-10"] {
+    background-color: #FFD700;
+}
+
+/* 11-20: 파란색 */
+.number[data-range="11-20"] {
+    background-color: #1E90FF;
+}
+
+/* 21-30: 빨간색 */
+.number[data-range="21-30"] {
+    background-color: #FF4500;
+}
+
+/* 31-40: 회색 */
+.number[data-range="31-40"] {
+    background-color: #808080;
+}
+
+/* 41-45: 녹색 */
+.number[data-range="41-45"] {
+    background-color: #32CD32;
 }
 
 .bonus {

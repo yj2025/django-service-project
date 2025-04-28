@@ -10,7 +10,17 @@
     <h1>번호 생성 결과</h1>
     <div class="numbers-container">
       {% for number in numbers %}
-      <span class="number">{{ number }}</span>
+        {% if number <= 10 %}
+          <span class="number" data-range="1-10">{{ number }}</span>
+        {% elif number <= 20 %}
+          <span class="number" data-range="11-20">{{ number }}</span>
+        {% elif number <= 30 %}
+          <span class="number" data-range="21-30">{{ number }}</span>
+        {% elif number <= 40 %}
+          <span class="number" data-range="31-40">{{ number }}</span>
+        {% else %}
+          <span class="number" data-range="41-45">{{ number }}</span>
+        {% endif %}
       {% endfor %}
     </div>
     <a href="{% url 'lotto:generate_numbers' %}" class="button">다시 생성하기</a>
