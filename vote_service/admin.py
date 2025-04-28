@@ -19,6 +19,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'vote', 'content', 'created_at')
     list_filter = ['created_at']
 
+# 모델 등록
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(Choice)
 admin.site.register(UserVote, UserVoteAdmin)
